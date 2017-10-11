@@ -1,0 +1,9 @@
+﻿La génération a démarré 29/05/2016 11:42:02.
+     1>Projet "C:\Users\KaosTheory\Desktop\Carte-Strategie\Programme Liaison serie\Serialus\serialus\serialus.vcxproj" sur le nœud 2 (build cible(s)).
+       Le fichier projet contient ToolsVersion="12.0". Cet ensemble d'outils est peut-être inconnu ou manquant. Dans ce cas, vous pouvez résoudre le problème en installant la version appropriée de MSBuild. Sinon, il est possible que la build ait été forcée vers un ToolsVersion spécifique pour des raisons liées à une stratégie. Projet traité comme si ToolsVersion="4.0". Pour plus d'informations, consultez http://go.microsoft.com/fwlink/?LinkId=291333.
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\Win32\Microsoft.Cpp.Win32.Targets(511,5): error MSB8008: L'ensemble d'outils de plateforme (v120) n'est pas installé ou n'est pas valide. Vérifiez qu'une valeur PlatformToolset prise en charge est sélectionnée.
+     1>Génération du projet "C:\Users\KaosTheory\Desktop\Carte-Strategie\Programme Liaison serie\Serialus\serialus\serialus.vcxproj" terminée (build cible(s)) -- ÉCHEC.
+
+ÉCHEC de la build.
+
+Temps écoulé 00:00:00.01
