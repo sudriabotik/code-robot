@@ -29,6 +29,7 @@ void son_evitement (uint8_t melodie)
     //commande_AX12(100, _4PARAM, WRITE_DATA, 0x28, melodie);
 }
 
+
 void rotation_us(void)
 {
     static char sens = 0;
@@ -37,14 +38,14 @@ void rotation_us(void)
    // {
         if (sens == 0)
         {
-            synchro_AX12(AX_US, angle, 1023, SANS_ATTENTE);
+           
             angle -= 6;
             if (angle < -60)
                 sens = 1;
         }
         else
         {
-            synchro_AX12(AX_US, angle, 1023, SANS_ATTENTE);
+            
             angle += 6;
             if (angle > 60)
             sens = 0;
@@ -82,9 +83,6 @@ void rotation_us_avant ()
         if (position_G < 512)
             sens_G = 0;
     }
-
-    angle_AX12(AX_US_DROIT, position_D, 1023, SANS_ATTENTE);
-    angle_AX12(AX_US_GAUCHE, position_G, 1023, SANS_ATTENTE);
 }
 
 //uint8_t inversion_autom (uint8_t cote)
@@ -129,6 +127,12 @@ void rotation_us_avant ()
 void init_jack()
 {
     allumer_LED_AX12(TOUS_LES_AX12);
+}
+
+void jack()
+{
+    while(!SYS_JACK);
+    while(SYS_JACK);
 }
 
 void init_depart()

@@ -40,32 +40,8 @@ extern "C" {
     typedef enum
     {
         VERT,
-        JAUNE
+        ORANGE
     }_enum_couleurs;
-    
-    typedef enum
-    {
-        AUTOM_ID_MIN_NB = 0,
-        AUTOM_PRINCIPALE = AUTOM_ID_MIN_NB,
-        AUTOM_AVANT,
-        AUTOM_ARRIERE,
-        AUTOM_ID_MAX_NB        
-    }_autom_id;
-    
-    typedef enum
-    {
-        AVANT = AUTOM_AVANT,
-        ARRIERE = AUTOM_ARRIERE,
-        LES_DEUX
-    }_cote;
-    
-    typedef enum
-    {
-        PINCE_BAS = 0,
-        PINCE_HAUT,
-        ASCENSEUR,
-        RETOURNE_MODULE
-    }_type_actionneur;
     
 
     /**************************************************************************/
@@ -73,20 +49,19 @@ extern "C" {
     /**************************************************************************/
 
 #ifdef PETIT_ROBOT
-    #define PINCE_BAS_AV            7
-    #define PINCE_BAS_AR            5
-    #define PINCE_HAUT_AV           1
-    #define PINCE_HAUT_AR           2
-    #define ASC_AVANT               9
-    #define ASC_ARRIERE             10
-    #define BITE_AV                 6
-    #define BITE_AR                 8
+    
+    #define LOQUET 10 
+    #define INTERRUPTEUR 1
+    #define BAC 8
+    
 #endif
 
 #ifdef  GROS_ROBOT
-    #define AX_US                   17
-    #define AX_US_DROIT             23
-    #define AX_US_GAUCHE            4
+    
+    #define BRAS_DROIT              5
+    #define BRAS_GAUCHE             2
+    #define PORTE_CANON             3
+    #define LOQUET                  4
 
 #endif
 
@@ -95,24 +70,32 @@ extern "C" {
     /**************************************************************************/
 
 #ifdef  PETIT_ROBOT
-    #define PINCE_POS_REPLI                 848
-    #define PINCE_POS_OUVERTE               630
-    #define PINCE_POS_ENTROUVERTE           575
-    #define PINCE_POS_FERME                 535  // 540
+    #define LOQUET_I 500
+    #define LOQUET_D 725
+    #define LOQUET_G 290
 
-    #define ASC_AR_POS_BAS                     320    
-    #define ASC_AR_POS_INIT                    440 
-    #define ASC_AR_POS_INIT_MAX                560
-    #define ASC_AR_POS_HAUT                    803 // 793
-
-    #define ASC_AV_POS_BAS                     291    
-    #define ASC_AV_POS_INIT                    392
-    #define ASC_AV_POS_INIT_MAX                510
-    #define ASC_AV_POS_HAUT                    770 // 760
-            
+    #define INTERRUPTEUR_O 609
+    #define INTERRUPTEUR_F 895
+    
+    #define BAC_I 700
+    #define BAC_INT 550
+    #define BAC_D 500
 #endif
 
 #ifdef GROS_ROBOT
+    
+    #define BRAS_DROIT_F  205
+    #define BRAS_DROIT_O  812
+    
+    #define BRAS_GAUCHE_F  812
+    #define BRAS_GAUCHE_O  222
+
+    #define LOQUET_I  335
+    #define LOQUET_O  490 //419//490//540 //525//490 //486 vert //484
+    #define LOQUET_F 750
+
+    #define PORTE_CANON_O 650
+    #define PORTE_CANON_F 1200
 
 #endif
 
@@ -122,31 +105,10 @@ extern "C" {
 
     typedef enum
     {
-        NE_RIEN_FAIRE,   
-        EN_ATTENTE_EVENT,
-        CHECK_AX12_EVENT,
-        CHECK_SYNC_EVENT,
+        NE_RIEN_FAIRE,                                       
 
 #ifdef  PETIT_ROBOT
         // FLAG_ACTION DU PETIT ROBOT
-                
-        /*** INIT ***/        
-        START_ROBOT,
-        INIT_PINCES_OUVERTES,
-        WAIT_INIT_ROBOT_COMPLETE,
-        INIT_ROBOT_COMPLETE,
-                
-        /*** RECHERCHE MODULE ***/
-        MONTAGE_TOUR_PRET,
-        MT_RECHERCHE_MODULE_EN_COURS,
-        MT_MODULE_DETECTE,
-        MT_MODULE_ATTRAPE,
-        MT_PRET_A_MONTER,
-        MT_ASC_EN_HAUT,
-        MT_MODULE_ATTRAPE_EN_HAUT,
-        MT_PRET_A_REDESCENDRE,
-        MT_TOUR_COMPLETE,
-                
 #endif
 
 #ifdef GROS_ROBOT
@@ -156,7 +118,10 @@ extern "C" {
         FIN_DE_MATCH
             
     }_enum_flag_action;
-    
+
+
+
+
 /******************************************************************************/
 /******************************************************************************/
 /******************************************************************************/
@@ -174,9 +139,7 @@ extern "C" {
     void son_evitement (uint8_t melodie);
 
 #ifdef  PETIT_ROBOT
-    // Fonctions init
-    void init_system_arriere();
-    void init_system_avant();
+
 #endif
 
 #ifdef  GROS_ROBOT
@@ -216,5 +179,4 @@ extern "C" {
 #endif
 
 #endif	/* AUTOM_H */
-
 

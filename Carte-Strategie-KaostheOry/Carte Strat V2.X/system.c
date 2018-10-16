@@ -28,7 +28,6 @@
 
 void init_system (void)
 {
-    uint8_t autom_id = AUTOM_PRINCIPALE;
     init_clock();
  
     OVERFLOW_CODEUR[CODEUR_D] = PAS_D_OVERFLOW_CODEUR;
@@ -55,8 +54,13 @@ void init_system (void)
     //ConfigADC();
 
     // Init des uart
-    InitUART(UART_XBEE, 115200);
-    InitUART(UART_AX12, 1000000);
+    #ifndef NO_SERIALUS
+        InitUART(UART_XBEE, 115200);
+    #endif
+    #ifdef MODULE_RF
+        InitUART(UART_RF, 19200);
+    #endif
+    InitUART(UART_AX12, 500000);
     
     delay_ms(1000);
     
@@ -70,14 +74,8 @@ void init_system (void)
     init_evitement();
 
     // AUTOMS
-    COULEUR = JAUNE;
-    
-    for (autom_id = AUTOM_ID_MIN_NB ; autom_id < AUTOM_ID_MAX_NB ; autom_id++)
-    {
-       FLAG_ACTION[autom_id] = NE_RIEN_FAIRE; 
-       cancel_timer(autom_id);
-       init_ax12_event(autom_id);
-    }
+    FLAG_ACTION = NE_RIEN_FAIRE;
+    COULEUR = ORANGE;
     
     init_compteur_temps_match();
     init_flag_asserv();

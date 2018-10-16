@@ -24,14 +24,14 @@
 uint8_t couleur_depart()
 {
     if (SYS_COULEUR == 0)
-        return JAUNE;
+        return ORANGE;
     else
         return VERT;
 }
 
 double inversion_couleur (double param_inversable)
 {
-    if (COULEUR == JAUNE)
+    if (COULEUR == ORANGE)
         return param_inversable;
     else
         return (- param_inversable);
@@ -93,7 +93,9 @@ void carre (int8_t sens_marche)
 
 void action_evitement (void)
 {
-
+    EVITEMENT_ADV.mode = STOP;
+    EVITEMENT_ADV.detection = OFF;
+    rejoindre(1321, 550, MARCHE_AVANT, 50);
 }
 
 void cibler (double x, double y, double pourcentage_vitesse)
@@ -299,8 +301,8 @@ _enum_erreur_asserv _calage (double distance, double pourcentage_vitesse)
     FLAG_ASSERV.etat_angle = ANGLE_ATTEINT;
     FLAG_ASSERV.etat_distance = EN_COURS;
     FLAG_ASSERV.immobilite = 0;
-    PID.VITESSE_DIS.max_I = MAX_ERREUR_INTEGRALLE_V / 4;
-    PID.VITESSE_DIS.seuil_immobilite = SEUIL_IMMOBILITE /4;
+    PID.VITESSE_DIS.max_I = MAX_ERREUR_INTEGRALLE_V / 10;
+    PID.VITESSE_DIS.seuil_immobilite = SEUIL_IMMOBILITE /10;
 
     FLAG_ASSERV.fin_deplacement = DEBUT_DEPLACEMENT;
     while (FLAG_ASSERV.fin_deplacement != FIN_DEPLACEMENT);
@@ -413,10 +415,8 @@ void _fdt (double angle, char last)
     }
 
     angle = inversion_couleur(angle);
-    
+
     ORIENTATION.consigne = (angle * Pi)/ 180 * (ENTRAXE_TICKS/2);
-    
-    printf("_fdt : angle = %lf, Orientation = %lf\n\r", angle, ORIENTATION.consigne);
 
 #ifdef PETIT_ROBOT
     VITESSE_MAX.orientation = VITESSE_ANGLE_PAS;
@@ -470,7 +470,7 @@ _enum_erreur_asserv _rejoindre (double x, double y, int8_t sens_marche, double p
 
     
 #ifdef PETIT_ROBOT
-    VITESSE_MAX.orientation = VITESSE_ANGLE_PAS;
+    VITESSE_MAX.orientation = VITESSE_ANGLE_PAS ;
     acc.acceleration.orientation.consigne = acc.deceleration.orientation.max;
     acc.deceleration.orientation.consigne = acc.deceleration.orientation.max;
 #else
@@ -1906,7 +1906,7 @@ void MAJ_obstacle(int x_present, int y_present,int angle,int8_t sens_marche,int 
         droite = precedent_obstacle[6];
     }
 
-
+    
     precedent_obstacle[4] = gauche;
     precedent_obstacle[5] = centre;
     precedent_obstacle[6] = droite;
@@ -2760,8 +2760,5 @@ if(id == id_evitement_initial){
     calcul_en_cours = OFF;
 }
 
-void detect (uint8_t arg) 
-{
-    EVITEMENT_ADV.detection = arg;
-}
+void detect (uint8_t arg) {EVITEMENT_ADV.detection = arg;}
 
