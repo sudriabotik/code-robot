@@ -120,7 +120,13 @@ void evitement()
                 {
                     EVITEMENT_ADV.detection = OFF;
                     unbrake();
-                }   
+                }
+                
+                /*modif 10.0518 - 2h30*/
+                else{
+                    compteur = 0;
+                }
+                /**/
             }
         }
         else if (EVITEMENT_ADV.detection == ON && (EVITEMENT_ADV.mode == ACTION_EVITEMENT || EVITEMENT_ADV.mode == EVITEMENT_NORMAL))
@@ -128,11 +134,21 @@ void evitement()
             if (evitement_en_cours == false)
             {
                 compteur++;
-                if (compteur > 40)
+//                if (compteur > 40)
+                if (compteur > 100)
                 {
-                    evitement_en_cours = true;
                     compteur = 0;
-                    fin_deplacement_avec_brake(); // pas de brake avant ... on faisait un fin_deplacement_sans_brake
+                    if(check_evitement())
+                    {
+                        evitement_en_cours = true;
+                        compteur = 0;
+                        fin_deplacement();
+                    }
+                    else
+                    {
+                        EVITEMENT_ADV.detection = OFF;
+                        unbrake();
+                    }
                 }
             }
         }

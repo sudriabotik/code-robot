@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>Carte Strat V2</name>
+            <name>Carte Strat V2 actuel avec RF</name>
             <creation-uuid>beeab011-9c3f-4dc5-b0b5-70918da708d7</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions>c</c-extensions>

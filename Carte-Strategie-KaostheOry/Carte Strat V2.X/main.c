@@ -7,6 +7,13 @@
  * Date		: 22 octobre 2015, 23:55
  *******************************************************************************
  *
+ * ATTENTION!!!!!!
+ * UN PROBLEME DE MOSFET DURANT LA COUPE A CONDUIT A MODIFIER LE CODE POUR
+ * CONTROLER LE MOTEUR GAUCHE A PARTIR DU MOSFET "X"!!!
+ * CETTE MODIFICATION EST TROUVABLE DANS LA FONCTION asserv()
+ * ligne : envoit_pwm(MOTEUR_GAUCHE, 0.); et envoit_pwm(MOTEUR_GAUCHE, moteur.gauche);
+ * remplacé par envoit_pwm(MOTEUR_X, 0.); envoit_pwm(MOTEUR_X, moteur.gauche);
+ * 
  *
  ******************************************************************************/
 
@@ -68,10 +75,7 @@
 
     volatile __attribute__((near)) _compteur_temps_match CPT_TEMPS_MATCH;
     volatile _enum_couleurs COULEUR;
-    volatile _enum_flag_action FLAG_ACTION[AUTOM_ID_MAX_NB];
-    volatile _timer_event timer_event[AUTOM_ID_MAX_NB];
-    volatile _ax12_event ax12_event[AUTOM_ID_MAX_NB];
-    volatile _sync_event sync_event[AUTOM_ID_MAX_NB];
+    volatile _enum_flag_action FLAG_ACTION;
 
 
     int obstacle[30][20];
@@ -107,28 +111,60 @@ int main(int argc, char** argv)
     /**************************************************************************/
 
     init_system();
-    init_evitement_hugo();
+    //init_evitement_hugo();
     TIMER_200ms = ACTIVE;
     delay_ms(500);
     
 
-    printf("\n\n\n\n\r INIT ROBOT : \n\n\n\n\n\n\r");
+    //printf("\n\n\n\n\r INIT ROBOT : \n\n\n\n\n\n\r");
 
 
     /**************************************************************************/
     /**************************************************************************/
     /**************************************************************************/
 
-    init_decalage_AX12 ();
-    init_position_AX12();
+    //init_decalage_AX12 ();
+    //init_position_AX12();
 
     /**************************************************************************/
     /**************************************************************************/
     /**************************************************************************/
     
+#ifdef MODULE_RF
+    //uint32_t j=0;
+    //uint8_t i;
+    initRF();
+    if(MON_ID==ID_PETIT_ROBOT){
+        //testRapiditeEnvoyeur();
+      
+        debugEnvoyeur();
+        //testRFEnvoyeur();
+        
+        /* temporisation en seconde
+        for(i=0;i<2;i++){
+            j=0;
+            while((j++)<0xFFFFD); // 0,5s
+            j=0;
+            while((j++)<0xFFFFD); // 0,5s
+        }
+        */
+    }
+    if(MON_ID==ID_GROS_ROBOT){
+        //testRapiditeReceveur();
+        debugReceveur();
+        //testRFReceveur();
+        /*uint8_t chartepo[]="ER_CMD#C?";
+        uint8_t chartepo[]="U";
+        while(1){
+            PutsUART(UART_RF,chartepo, 1);
+        }*/
+    }
+#endif
+    
     strategie();
-
+    //homologation();
     //reglage_odometrie();
+    //test_AX12();
     
     /**************************************************************************/
     /************************* POSITION D'ARRIVEE *****************************/

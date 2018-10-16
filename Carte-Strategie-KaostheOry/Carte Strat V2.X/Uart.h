@@ -14,8 +14,9 @@
 
 
 //Type UART
-#define UART_XBEE						1			// UART1
-#define UART_RS232                                              1
+#define UART_XBEE                       1			// UART1
+#define UART_RS232                      1
+#define UART_RF                         2           // UART1
 #define UART_AX12						3 			// UART2
 
 //Taille buffer
@@ -63,6 +64,12 @@ void vider_buffer_reception_uart (uint8_t uart);
  * @param	: octet		: octet a envoyer
  */
 void PutcUART (int8_t channel, uint8_t octet);
+
+/**
+ * @brief	: Fonction permettant d'envoyer une chaine de caracteres sur la liaison serie sur l'UART1 (UART_XBEE | UART_AX12)
+ * @param	: chaine[]		: octet a envoyer
+ */
+void PutsUART(uint8_t channel, uint8_t chaine[], uint8_t taille);
 
 
 #endif	/* UART_H */

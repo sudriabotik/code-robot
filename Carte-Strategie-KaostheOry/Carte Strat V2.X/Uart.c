@@ -24,7 +24,7 @@ void InitUART (int8_t channel, uint32_t baud)
 {
 	// UART1 : DEUBG
     // La fonction printf est directement mappé sur l'UART 1
-	if (channel == UART_XBEE)
+	if (channel == UART_XBEE || channel == UART_RF)
 	{
             // U1BRG
             U1BRG = calcul_baud (baud);
@@ -36,9 +36,9 @@ void InitUART (int8_t channel, uint32_t baud)
             U1STAbits.UTXBRK 	= 0;		// Sync Break desactivee
 
           //  #ifdef UTILISATION_MODULE_XBEE
-          //          U1STAbits.UTXINV 	= 1;		// Polarite inversee
-          //  #else
-                    U1STAbits.UTXINV 	= 0;		// Polarite non inversee
+          //          U1STAbits.UTXINV 	= 1;		// Polarite inversee (Start bit=1)
+          //  #else                                 //Pour RF et autre
+                    U1STAbits.UTXINV 	= 0;		// Polarite non inversee (Start bit=0)
           //  #endif
 
             U1STAbits.UTXISEL0 	= 0;		// TX interruption sur transmission d'un caractere
@@ -52,9 +52,9 @@ void InitUART (int8_t channel, uint32_t baud)
             U1MODEbits.BRGH     = 1;		// Vitesse élevée
 
             //#ifdef UTILISATION_MODULE_XBEE
-    //                U1MODEbits.URXINV 	= 1;		// Polarite non inversee
-            //#else
-                    U1MODEbits.URXINV 	= 0;		// Polarite non inversee
+    //                U1MODEbits.URXINV 	= 1;		// Polarite inversee (Start bit=1)
+            //#else                                     //Pour RF et autre
+                    U1MODEbits.URXINV 	= 0;		// Polarite non inversee (Start bit=0)
             //#endif
 
             U1MODEbits.ABAUD 	= 0;		// Baud non automatique
@@ -158,7 +158,7 @@ uint16_t calcul_baud (uint32_t baud)
 
 void modifier_vitesse_com_uart (int8_t uart, uint32_t baud)
 {
-    if (uart == UART_XBEE)
+    if (uart == UART_XBEE || uart == UART_RF)
     {
          U1MODEbits.UARTEN 	= 0;
          // on vide luart
@@ -202,7 +202,7 @@ void PutcUART (int8_t channel, uint8_t octet)
 {
 	// UART1 : XBEE
     // Préférer la fonction  printf pour l'uart XBEE
-	if (channel == UART_XBEE )
+	if (channel == UART_XBEE || channel == UART_RF)
 	{
         while (U1STAbits.UTXBF); U1TXREG = octet;
 	}
@@ -213,6 +213,15 @@ void PutcUART (int8_t channel, uint8_t octet)
         ax12.etat_uart = EN_COURS_ENVOIT;
 		while (U2STAbits.UTXBF); U2TXREG = octet;
 	}
+}
+
+void PutsUART(uint8_t channel, uint8_t chaine[], uint8_t taille) { //ajouter channel et taille
+    uint8_t i;
+    
+    for(i=0;i<taille;i++){
+        PutcUART(channel ,chaine[i]);
+        //delay_ms(300);//temporaire pour les tests
+    }
 }
 
 /******************************************************************************/

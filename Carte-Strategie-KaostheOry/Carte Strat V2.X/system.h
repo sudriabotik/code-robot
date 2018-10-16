@@ -35,6 +35,7 @@ extern "C" {
     #include "autom.h"
     #include "Serialus.h"
     #include "evitement.h"
+    #include "RF_uart.h"
     
 
 /******************************************************************************/
@@ -193,7 +194,7 @@ extern "C" {
 
 
 #define ACTIV_INTER_TIMER1              1   // Timer asserv : 5 ms
-#define ACTIV_INTER_TIMER2              0   // Osef : TIMER 2 et 3 sur 32 bits    
+#define ACTIV_INTER_TIMER2              1   // Osef : TIMER 2 et 3 sur 32 bits    
 #define ACTIV_INTER_TIMER3              1   // Timer 90 secondes : fin de match
 #define ACTIV_INTER_TIMER4              1   // Timer Autom : 10 ms
 #define ACTIV_INTER_TIMER5              1   // Timer debug : 200 ms
@@ -201,7 +202,8 @@ extern "C" {
 #define ACTIV_INTER_I2C_MAITRE          0   // Pas implémenté pour le moment
 #define ACTIV_INTER_I2C_ESCLAVE         0   // Pas implémenté pour le moment    
     
-#define ACTIV_INTER_UART1_RX            1   // Uart XBEE
+#define ACTIV_INTER_UART1_TX            1   // Uart Xbee : Tx
+#define ACTIV_INTER_UART1_RX            1   // Uart XBEE : Rx
 #define ACTIV_INTER_UART2_TX            1   // UART AX12 : Acquittement trame envoyée
 #define ACTIV_INTER_UART2_RX            1   // UART AX12
     
@@ -242,7 +244,7 @@ typedef struct
     extern volatile __attribute__((near)) _robot ROBOT;
     extern volatile __attribute__((near)) _acc acc;
     extern volatile __attribute__((near)) _PID PID;
-    extern volatile __attribute__((near)) _flag_asserv FLAG_ASSERV[AUTOM_ID_MAX_NB];
+    extern volatile __attribute__((near)) _flag_asserv FLAG_ASSERV;
 
     extern volatile __attribute__((near)) _systeme_asserv X;
     extern volatile __attribute__((near)) _systeme_asserv Y;
@@ -262,16 +264,11 @@ typedef struct
     //Evitement adversaire
     extern volatile _evitement EVITEMENT_ADV;
     
-    extern volatile __attribute__((near)) _compteur_temps_match CPT_TEMPS_MATCH;
-    extern volatile _enum_couleurs COULEUR;
-    
     // FLAG Automs
-    extern volatile _enum_flag_action FLAG_ACTION[AUTOM_ID_MAX_NB];
-    extern volatile _timer_event timer_event[AUTOM_ID_MAX_NB];
-    extern volatile _ax12_event ax12_event[AUTOM_ID_MAX_NB];
-    extern volatile _sync_event sync_event[AUTOM_ID_MAX_NB];
+    extern volatile _enum_couleurs COULEUR;
+    extern volatile _enum_flag_action FLAG_ACTION;
+    extern volatile __attribute__((near)) _compteur_temps_match CPT_TEMPS_MATCH;
 
-    // Ax12 variables
     extern volatile _ax12 ax12;
     extern volatile _Bool CHECK_LIMITATION_COURANT;
     
@@ -392,14 +389,21 @@ typedef struct
     void ConfigMapping (void);
 
     /**
-     * Fonction stratégie du robot
+     * Fonctions stratégie du robot
      */
+    void attendre();
     void strategie();
-
     void homologation();
-    void reglage_odometrie();
     
-
+    /**
+     * Fonctions d'actions du robot
+     */
+     void recuperation_balles();
+     void depot_balles();
+     
+     void init_AX12();
+     
+     void interrupteur();
 
 
 #ifdef	__cplusplus
